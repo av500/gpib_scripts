@@ -1,0 +1,123 @@
+#! /usr/bin/env python2.7
+import socket
+import vxi11
+import sys
+import os
+from datetime import datetime
+from subprocess import Popen, PIPE
+
+if len(sys.argv) < 2 :
+	print("usage: hardcopy_FSEx filename.png")
+	exit();
+
+output = Popen(['logname'], stdout = PIPE)
+response = output.communicate()
+user = response[0][:-1]
+
+s = socket.socket()
+host = "192.168.1.22"
+port = 515
+s.bind((host,port))
+s.listen(5)
+
+print("[host] " + host)
+print("[user] " + user)
+
+instr = vxi11.Instrument("TCPIP::192.168.1.159::INSTR")
+print("[IDN?] " + instr.ask("*IDN?"))
+
+instr.write("HARDC:FORM BMPC")
+instr.write("HARDC:INKS OFF")
+instr.write("HARDC:LAY PORTRAIT")
+instr.write("HARDC:PALE NORM")
+instr.write("HARDC:PORT ETHER")
+instr.write("HARDC:COMPRESS OFF")
+instr.write("HARDCOPY START")
+
+while True:
+	print("[wait] ...")
+	c, addr = s.accept()
+	print("[conn] " + repr(addr[0]) + ":" + repr(addr[1]))
+
+	data = c.recv(4096)
+
+	#print("len " + str(len(data)))
+	#print(ord(data[0]))
+
+	if(ord(data[0]) != 2) :
+		print("not RECEIVE JOB!")
+		c.close()
+		continue
+
+	#ACK
+	c.send(bytearray([0]))
+
+	data = c.recv(4096)
+
+	#print("len " + str(len(data)))
+	#print(ord(data[0]))
+
+	if ord(data[0]) != 2 :
+		print("not CTRL file!")
+		c.close()
+		continue
+
+	#ACK
+	c.send(bytearray([0]))
+			
+	# get CTRL bla
+	data = c.recv(4096)
+	#print("len " + str(len(data)))
+	#ACK
+	c.send(bytearray([0]))
+
+	# get 0 octect
+	data = c.recv(1)
+	#print("len " + str(len(data)))
+	#print(ord(data[0]))
+	#ACK
+	c.send(bytearray([0]))
+
+	data = c.recv(4096)
+	#print("len " + str(len(data)))
+	#print(ord(data[0]))
+
+	if ord(data[0]) != 3 :
+		print("not DATA file!")
+		c.close()
+		continue
+
+	#ACK
+	c.send(bytearray([0]))
+
+	f = open("__temp.bmp", "wb")
+				
+	while True:
+		data = c.recv(4096)
+		#print("len " + str(len(data)))
+		if len(data) == 0 :
+			#final ACK
+			c.send(bytearray([0]))
+			break;
+		f.write(data)
+
+	c.close()
+
+	f.truncate(f.tell() - 1)
+	f.close()
+
+	now = datetime.now()
+	filepath = now.strftime("TDS3000_%Y%m%d_%H%M%S.png")
+	print("[file] " + filepath)	
+	
+	cmd = "convert __temp.bmp {0}".format(filepath)
+	os.system(cmd)
+	os.system("rm __temp.bmp")
+
+	cmd = "chown {0}:users {1}".format(user, filepath)
+	os.system(cmd)
+
+	break
+
+exit()
+
