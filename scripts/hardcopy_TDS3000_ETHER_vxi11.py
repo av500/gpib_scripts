@@ -6,10 +6,6 @@ import os
 from datetime import datetime
 from subprocess import Popen, PIPE
 
-if len(sys.argv) < 2 :
-	print("usage: hardcopy_FSEx filename.png")
-	exit();
-
 output = Popen(['logname'], stdout = PIPE)
 response = output.communicate()
 user = response[0][:-1]
@@ -106,8 +102,12 @@ while True:
 	f.truncate(f.tell() - 1)
 	f.close()
 
-	now = datetime.now()
-	filepath = now.strftime("TDS3000_%Y%m%d_%H%M%S.png")
+	if len(sys.argv) < 2 :
+		now = datetime.now()
+		filepath = now.strftime("TDS3000_%Y%m%d_%H%M%S.png")
+	else :
+		filepath = sys.argv[1]
+		
 	print("[file] " + filepath)	
 	
 	cmd = "convert __temp.bmp {0}".format(filepath)
