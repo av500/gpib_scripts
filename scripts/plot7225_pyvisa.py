@@ -121,6 +121,18 @@ def handle_PA(prefix, line):
 			nlen -= max_len
 			send_line(line)
 
+def handle_LB(line):
+	global xpos, ypos
+
+	print("handle_LB")
+	if len(line) == 0 :
+		return
+	nums = line.split(";")
+	nlen = len(nums)
+	if nlen < 2 :
+		return;
+	send_line("LB" + nums[0] + chr(0x03))
+	return;
 
 
 rm = visa.ResourceManager('@py')
@@ -172,6 +184,9 @@ with open(filepath) as fp:
 			elif line.find("CI") == 0:
 					# handle circle
 					handle_CI(line[2:])
+			elif line.find("LB") == 0:
+					# handle label
+					handle_LB(line[2:])
 			else :
 				send_line(line)
 
