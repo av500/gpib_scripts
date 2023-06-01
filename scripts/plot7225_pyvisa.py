@@ -134,6 +134,19 @@ def handle_LB(line):
 	send_line("LB" + nums[0] + chr(0x03))
 	return;
 
+def handle_DP():
+	instr.write("DP;")
+
+	while True :
+		instr.write("OS;")
+		ret = int(read_string(instr))
+		print("status: " + str(ret))
+		if ret & 0x04 : 
+			break;
+		time.sleep(0.5)
+	
+	instr.write("OD;")
+	print("pos:  " + read_string(instr))
 
 rm = visa.ResourceManager('@py')
 
