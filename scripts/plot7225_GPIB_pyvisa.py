@@ -3,7 +3,6 @@ import pyvisa as visa
 import time
 import sys
 import math
-
 cnt = 0
 pen = 0
 xpos = 0
@@ -155,11 +154,17 @@ instr = rm.open_resource('GPIB0::1::INSTR')
 instr.write("OI;")
 print("plotter:  " + read_string(instr))
 
+instr.write("OS;")
+print("status:   " + read_string(instr))
+
+instr.write("OE;")
+print("error:    " + read_string(instr))
+
 if len(sys.argv) < 2 :
 	print("usage: plot7225 filename.hpgl")
 	exit()
 
-print('plotting:', str(sys.argv[1]))
+print('plotting: ', str(sys.argv[1]))
 
 filepath = sys.argv[1]
 
