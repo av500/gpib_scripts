@@ -156,6 +156,8 @@ rm = visa.ResourceManager('@py')
 
 instr = rm.open_resource('GPIB0::1::INSTR')
 
+instr.timeout = 5000;
+
 instr.write("OI;")
 print("plotter:  " + read_string(instr))
 
