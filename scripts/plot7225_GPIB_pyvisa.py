@@ -130,7 +130,12 @@ def handle_LB(line):
 	nlen = len(nums)
 	if nlen < 2 :
 		return;
-	send_line("LB" + nums[0] + chr(0x03))
+	slen = len(nums[0])
+	if nums[0][slen-1] == chr(0x03) :
+		send_line("LB" + nums[0])
+	else :
+		send_line("LB" + nums[0] + chr(0x03))
+	
 	return;
 
 def handle_DP():
