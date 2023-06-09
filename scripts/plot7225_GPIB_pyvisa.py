@@ -35,7 +35,7 @@ def send_line(line):
 	
 	print("SEND {} : {}".format(cnt, line))
 	cnt += 1
-
+	#print_hex(line)
 	instr.write(line)
 
 def handle_CI(line):
