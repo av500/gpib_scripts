@@ -183,6 +183,7 @@ with open(filepath) as fp:
 	while readline:
 		lines = readline.split(";")
 		for line in lines:
+			line = line.replace("\n", "")
 			if line == "PD0,90":
 				print("ignore: {}".format(line))
 				continue
