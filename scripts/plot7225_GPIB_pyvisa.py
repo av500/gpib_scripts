@@ -9,7 +9,7 @@ xpos = 0
 ypos = 0
 
 def print_hex(data):
-	hex_str = ":".join("{:02x}".format(c) for c in data)
+	hex_str = ":".join("{:02x}".format(c) for c in data.encode(encoding = 'ASCII'))
 	print(hex_str + " | " + str(data) )
 
 def read_string(instr):
