@@ -12,7 +12,6 @@
   
 #include "gpib/ib.h"
 
-
 unsigned char utul[] = {UNT,UNL};
 
 int twos(int val)
@@ -38,20 +37,13 @@ void emit( int fd, int type, int code, int val )
 
 void move_to(int fd, int x, int y)
 {
-#if 0
-	emit(fd, EV_REL, REL_X, x);
-	emit(fd, EV_REL, REL_Y, y);
-	emit(fd, EV_SYN, SYN_REPORT, 0);
-#else
 	emit(fd, EV_ABS, ABS_X, x);
 	emit(fd, EV_ABS, ABS_Y, y);
 	emit(fd, EV_SYN, SYN_REPORT, 0);
-#endif
 }
 
 void click(int fd, int btn, int press)
 {
-//	emit(fd, EV_MSC, MSC_SCAN, 0xd0042);
 	emit(fd, EV_KEY, btn, press);
 	emit(fd, EV_SYN, SYN_REPORT, 0);
 }
@@ -73,20 +65,15 @@ int main( int argc, char *argv[] )
 	ioctl(fd, UI_SET_KEYBIT, BTN_TOOL_PEN);
 	ioctl(fd, UI_SET_MSCBIT, EV_MSC);
 
-#if 0
-	ioctl(fd, UI_SET_EVBIT, EV_REL);
-	ioctl(fd, UI_SET_RELBIT, REL_X);
-	ioctl(fd, UI_SET_RELBIT, REL_Y);
-#else
 	ioctl(fd, UI_SET_EVBIT, EV_ABS);
 	ioctl(fd, UI_SET_ABSBIT, ABS_X);
 	ioctl(fd, UI_SET_ABSBIT, ABS_Y);	
-#endif
+
 	memset(&usetup, 0, sizeof(usetup));
 	usetup.id.bustype = BUS_USB;
-	usetup.id.vendor = 0x1234; /* sample vendor */
-	usetup.id.product = 0x5678; /* sample product */
-	strcpy(usetup.name, "Example device");
+	usetup.id.vendor  = 0x9111; /* sample vendor */
+	usetup.id.product = 0x9111; /* sample product */
+	strcpy(usetup.name, "HP9111A Graphics Tablet");
 
 	ioctl(fd, UI_DEV_SETUP, &usetup);
 
@@ -118,11 +105,10 @@ int main( int argc, char *argv[] )
 		return -1;
 	}
 
-	printf( "Device online: board index=%i, pad=%i, sad=%i\n", board_index, pad, sad);
-
+	printf( "board: %i, pad: %i  sad: %i\n", board_index, pad, sad);
 	
-	int x_max  = 12032; // /3440 = 3.49
-	int y_max  = 8340;  // /1440 = 5.79
+	int x_max  = 12032;
+	int y_max  = 8340;
 	
 	int prox   = 0;
 	int down   = 0;
@@ -138,7 +124,7 @@ int main( int argc, char *argv[] )
 			return -1;
 		}
 
-		int count = ThreadIbcntl();
+		int count = ThreadIbcntl(); // should be always 6
 	
 		int x = twos(data[1] + (data[0] << 8));
 		int y = twos(data[3] + (data[2] << 8));
