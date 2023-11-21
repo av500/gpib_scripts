@@ -16,6 +16,11 @@ port = 515
 s.bind((host,port))
 s.listen(5)
 
+print("+---------------------------------------------+")
+print("| MAKE SURE THE FIREWALL IS OPEN FOR PORT 515 |")
+print("+---------------------------------------------+")
+print("")
+
 print("[host] " + host)
 print("[user] " + user)
 
@@ -45,6 +50,7 @@ while True:
 		c.close()
 		continue
 
+	print("[JOB ]")
 	#ACK
 	c.send(bytearray([0]))
 
@@ -58,6 +64,7 @@ while True:
 		c.close()
 		continue
 
+	print("[CTRL]")
 	#ACK
 	c.send(bytearray([0]))
 			
@@ -83,6 +90,8 @@ while True:
 		c.close()
 		continue
 
+	print("[DATA]")
+
 	#ACK
 	c.send(bytearray([0]))
 
@@ -101,6 +110,8 @@ while True:
 
 	f.truncate(f.tell() - 1)
 	f.close()
+
+	print("[done] ...")
 
 	if len(sys.argv) < 2 :
 		now = datetime.now()
