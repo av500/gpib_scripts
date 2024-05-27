@@ -10,16 +10,17 @@ output = Popen(['logname'], stdout = PIPE)
 response = output.communicate()
 user = response[0][:-1]
 
+print("+---------------------------------------------+")
+print("| MAKE SURE THE FIREWALL IS OPEN FOR PORT 515 |")
+print("|       and maybe you need to use sudo!       |")
+print("+---------------------------------------------+")
+print("")
+
 s = socket.socket()
 host = "192.168.1.22"
 port = 515
 s.bind((host,port))
 s.listen(5)
-
-print("+---------------------------------------------+")
-print("| MAKE SURE THE FIREWALL IS OPEN FOR PORT 515 |")
-print("+---------------------------------------------+")
-print("")
 
 print("[host] " + host)
 print("[user] " + user)
