@@ -125,7 +125,7 @@ while True:
 		
 	print("[file] " + filepath)	
 	
-	cmd = "convert __temp.bmp {0}".format(filepath)
+	cmd = "magick __temp.bmp {0}".format(filepath)
 	os.system(cmd)
 	os.system("rm __temp.bmp")
 
