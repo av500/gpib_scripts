@@ -17,15 +17,18 @@ print("+---------------------------------------------+")
 print("")
 
 s = socket.socket()
-host = "192.168.1.22"
-port = 515
-s.bind((host,port))
+host_ip   = "192.168.1.22"
+host_port = 515
+s.bind((host_ip,host_port))
 s.listen(5)
 
-print("[host] " + host)
-print("[user] " + user)
+scope_ip = "192.168.1.160" 
 
-instr = vxi11.Instrument("TCPIP::192.168.1.159::INSTR")
+print("[host] " + host_ip)
+print("[user] " + user)
+print("[scop] " + scope_ip)
+
+instr = vxi11.Instrument("TCPIP::" + scope_ip + "::INSTR")
 print("[IDN?] " + instr.ask("*IDN?"))
 
 instr.write("HARDC:FORM BMPC")
