@@ -43,8 +43,8 @@ while True:
 
 	data = c.recv(4096)
 
-	#print("len " + str(len(data)))
-	#print(ord(data[0]))
+#	print("len " + str(len(data)))
+#	print(ord(data[0]))
 
 	if(ord(data[0]) != 2) :
 		print("not RECEIVE JOB!")
@@ -57,8 +57,8 @@ while True:
 
 	data = c.recv(4096)
 
-	#print("len " + str(len(data)))
-	#print(ord(data[0]))
+#	print("len " + str(len(data)))
+#	print(ord(data[0]))
 
 	if ord(data[0]) != 2 :
 		print("not CTRL file!")
@@ -71,20 +71,20 @@ while True:
 			
 	# get CTRL bla
 	data = c.recv(4096)
-	#print("len " + str(len(data)))
+#	print("len " + str(len(data)))
 	#ACK
 	c.send(bytearray([0]))
 
 	# get 0 octect
 	data = c.recv(1)
-	#print("len " + str(len(data)))
-	#print(ord(data[0]))
+#	print("len " + str(len(data)))
+#	print(ord(data[0]))
 	#ACK
 	c.send(bytearray([0]))
 
 	data = c.recv(4096)
-	#print("len " + str(len(data)))
-	#print(ord(data[0]))
+#	print("len " + str(len(data)))
+#	print(ord(data[0]))
 
 	if ord(data[0]) != 3 :
 		print("not DATA file!")
@@ -100,7 +100,7 @@ while True:
 				
 	while True:
 		data = c.recv(4096)
-		#print("len " + str(len(data)))
+#		print("len " + str(len(data)))
 		if len(data) == 0 :
 			#final ACK
 			c.send(bytearray([0]))
