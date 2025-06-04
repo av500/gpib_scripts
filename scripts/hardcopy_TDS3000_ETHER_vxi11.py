@@ -1,4 +1,4 @@
-#! /usr/bin/env python2.7
+#! /usr/bin/env python3
 import socket
 import vxi11
 import sys
@@ -8,7 +8,7 @@ from subprocess import Popen, PIPE
 
 output = Popen(['logname'], stdout = PIPE)
 response = output.communicate()
-user = response[0][:-1]
+user = response[0][:-1].decode("ascii")
 
 print("+---------------------------------------------+")
 print("| MAKE SURE THE FIREWALL IS OPEN FOR PORT 515 |")
@@ -47,9 +47,9 @@ while True:
 	data = c.recv(4096)
 
 #	print("len " + str(len(data)))
-#	print(ord(data[0]))
+#	print(data[0])
 
-	if(ord(data[0]) != 2) :
+	if(data[0] != 2) :
 		print("not RECEIVE JOB!")
 		c.close()
 		continue
@@ -61,9 +61,9 @@ while True:
 	data = c.recv(4096)
 
 #	print("len " + str(len(data)))
-#	print(ord(data[0]))
+#	print(data[0])
 
-	if ord(data[0]) != 2 :
+	if data[0] != 2 :
 		print("not CTRL file!")
 		c.close()
 		continue
@@ -81,15 +81,15 @@ while True:
 	# get 0 octect
 	data = c.recv(1)
 #	print("len " + str(len(data)))
-#	print(ord(data[0]))
+#	print(data[0])
 	#ACK
 	c.send(bytearray([0]))
 
 	data = c.recv(4096)
 #	print("len " + str(len(data)))
-#	print(ord(data[0]))
+#	print(data[0])
 
-	if ord(data[0]) != 3 :
+	if data[0] != 3 :
 		print("not DATA file!")
 		c.close()
 		continue
